@@ -18,3 +18,6 @@ class Team:
         print(f'The team {self.team_name} has the following employees:')
         for employee in self.employees:
             print(employee)
+
+    def str_all_members_name(self):
+        return [employee.name for employee in self.employees] 

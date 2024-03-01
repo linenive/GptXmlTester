@@ -7,14 +7,21 @@ def press_start_game():
     game_thread = Thread(target=gameMain.start_game)
     game_thread.start()
 
-    guiStatus.create_new_window(gameMain.current_status)
+    open_status_window()
 
     game_start_button.pack_forget()
 
     status_button.pack()
+    work_button.pack()
 
     game_info_label.config(text="운명의 주사위는 던져졌다..........")
 
+def on_work_button_click():
+    gameMain.on_work()
+    status.update_var(gameMain.current_status)
+
+def open_status_window():
+    status.create_new_window(gameMain.current_status)
 
 # 메인 윈도우 생성
 root = tk.Tk()
@@ -32,7 +39,14 @@ game_start_button.pack()
 status_button = tk.Button(
         root,
         text="스테이터스",
-        command=lambda: guiStatus.create_new_window(gameMain.current_status))
+        command=open_status_window)
+
+work_button = tk.Button(
+        root,
+        text="일하기",
+        command=on_work_button_click)
+
+status = guiStatus.StatusWindow()
 
 # 메인 이벤트 루프 실행
 root.mainloop()

@@ -2,7 +2,7 @@ import tkinter as tk
 
 class StatusWindow():
     def __init__(self):
-        self.my_san = tk.IntVar()
+        self.my_san = tk.StringVar()
         self.my_state = tk.StringVar()
 
     def create_new_window(self, status):

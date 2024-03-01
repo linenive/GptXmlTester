@@ -1,6 +1,7 @@
 import tkinter as tk
 from threading import Thread
 import gui.guiStatus as guiStatus
+import gui.guiExplore as guiExplore
 import game.gameMain as gameMain
 
 def press_start_game():    
@@ -13,15 +14,19 @@ def press_start_game():
 
     status_button.pack()
     work_button.pack()
+    explore_button.pack()
 
     game_info_label.config(text="운명의 주사위는 던져졌다..........")
 
 def on_work_button_click():
     gameMain.on_work()
-    status.update_var(gameMain.current_status)
+    statusWindow.update_var(gameMain.current_status)
+
+def open_explore_window():
+    exploreWindow.create_new_window(gameMain.current_place, gameMain.places)
 
 def open_status_window():
-    status.create_new_window(gameMain.current_status)
+    statusWindow.create_new_window(gameMain.current_status)
 
 # 메인 윈도우 생성
 root = tk.Tk()
@@ -46,7 +51,13 @@ work_button = tk.Button(
         text="일하기",
         command=on_work_button_click)
 
-status = guiStatus.StatusWindow()
+explore_button = tk.Button(
+        root,
+        text="탐험하기",
+        command=open_explore_window)
+
+statusWindow = guiStatus.StatusWindow()
+exploreWindow = guiExplore.ExploreWindow()
 
 # 메인 이벤트 루프 실행
 root.mainloop()

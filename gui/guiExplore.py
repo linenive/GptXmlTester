@@ -22,13 +22,13 @@ def draw_graph_on_canvas(graph, root):
     canvas.draw()
 
 class ExploreWindow():
-    def create_new_window(self, current_place, places):
+    def create_new_window(self, current_explore):
         new_window = tk.Toplevel()
         new_window.title("탐험")
         new_window.geometry("600x300")
 
         place_name = tk.Label(
-            new_window, text=f'{current_place.floor}층, {current_place.name}')
+            new_window, text=f'{current_explore.current_place.floor}층, {current_explore.current_place.name}')
         place_name.pack()
 
         self.log_area = scrolledtext.ScrolledText(
@@ -36,13 +36,13 @@ class ExploreWindow():
         self.log_area.pack(padx=10, pady=10)
 
         self.add_log('당신은 의자를 박차고 일어났다... 주위를 둘러보았다.')
-        self.add_log(current_place.description)
+        self.add_log(current_explore.current_place.description)
         self.add_log('이제 무엇을 할까?')
 
         local_map_header = tk.Label(new_window, text='지역 지도')
         local_map_header.pack()
         
-        draw_graph_on_canvas(places, new_window)
+        draw_graph_on_canvas(current_explore.map_graph, new_window)
 
     def add_log(self, log):
         self.log_area.configure(state='normal')

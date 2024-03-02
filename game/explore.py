@@ -4,8 +4,8 @@ import game.place as place
 class Explore:
     def __init__(self):
         self.current_place = place.Place(
-            place.place_data[place.PlaceType.WORKSPACE].name, 
-            place.place_data[place.PlaceType.WORKSPACE].description,
+            "내 자리",
+            place.place_data_table[place.PlaceType.WORKSPACE],
             floor=2,
             is_my_desk=True)
         self.map_graph = nx.Graph()
@@ -23,3 +23,10 @@ class Explore:
         # 주변 지역 밝히기
         if(not self.current_place.is_revealed_neighbor_place):
             self.current_place.is_revealed_neighbor_place = True
+
+
+            for neighbor in place.neighbor_type_table[place.PlaceType.WORKSPACE]:
+                for key in neighbor:
+                    self.map_graph.add_edge(
+                        self.current_place.name,
+                        place.place_data[key].name)

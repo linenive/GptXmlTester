@@ -36,7 +36,7 @@ class ExploreWindow():
         self.log_area.pack(padx=10, pady=10)
 
         self.add_log('당신은 의자를 박차고 일어났다... 주위를 둘러보았다.')
-        self.add_log(current_explore.current_place.description)
+        self.add_log(current_explore.current_place.place_data.description)
         self.add_log('이제 무엇을 할까?')
 
         local_map_header = tk.Label(new_window, text='지역 지도')

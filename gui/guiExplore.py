@@ -4,12 +4,17 @@ import networkx as nx
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 
-def draw_graph_on_canvas(graph, root):
+def draw_graph_on_canvas(graph, labels, root):
+    # 노드 위치 결정
+    pos = nx.spring_layout(graph)
+    print(pos)
+
     # 새로운 matplotlib 그림(Figure) 객체 생성
     fig, ax = plt.subplots(figsize=(5, 4))
     
     # NetworkX 그래프를 그림에 그리기
-    nx.draw(graph, ax=ax, with_labels=True, node_color='skyblue', edge_color='gray')
+    nx.draw(graph, pos, ax=ax, with_labels=True, node_color='skyblue', edge_color='gray')
+    nx.draw_networkx_labels(graph, pos, labels, font_size=12)
     
     # FigureCanvasTkAgg 객체 생성
     canvas = FigureCanvasTkAgg(fig, master=root)  # root는 Tkinter의 메인 윈도우
@@ -48,7 +53,8 @@ class ExploreWindow():
         local_map_header = tk.Label(self.new_window, text='지역 지도')
         local_map_header.pack()
         
-        draw_graph_on_canvas(current_explore.map_graph, self.new_window)
+        draw_graph_on_canvas(
+            current_explore.map_graph, current_explore.get_labels(), self.new_window)
 
     def prepare_move_buttons(self):
         self.move_buttons = []
@@ -70,7 +76,8 @@ class ExploreWindow():
         # 기존 버튼 사용
         for i in range(len(neighbors)):
             self.move_buttons[i].configure(
-                text=neighbors[i], command=lambda neighbor=neighbors[i]: self.move(neighbor))
+                text=current_explore.get_label(neighbors[i]), 
+                command=lambda neighbor=neighbors[i]: self.move(neighbor))
             self.move_buttons[i].place(x=10 + i * 140, y=200)
 
     def move(self, neighbor):

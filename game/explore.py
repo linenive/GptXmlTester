@@ -13,6 +13,8 @@ class Explore:
             place.PlaceType.WORKSPACE,
             floor=2,
             is_my_desk=True)
+        self.maps = {}
+        self.maps[self.current_place.id] = self.current_place
         self.map_graph = nx.Graph()
         
         self.reveal_neighbor()
@@ -32,13 +34,31 @@ class Explore:
         num_neighbor = int(num_neighbor)
         neighbor_places = sample_places(place_data, num_neighbor)
 
-        for neighbor_place in neighbor_places:
+        for neighbor_place_type in neighbor_places:
+            new_place_data = place.place_data_table[neighbor_place_type]
+            new_place = place.Place(
+                new_place_data.name,
+                new_place_data.place_type,
+                2,
+                False
+            )
+            self.maps[new_place.id] = new_place
             self.map_graph.add_edge(
-                self.current_place.name,
-                neighbor_place.name)
+                self.current_place.id,
+                new_place.id)  
     
     def get_neighbor_places(self):
-        return self.map_graph.neighbors(self.current_place.name)
+        return self.map_graph.neighbors(self.current_place.id)
+    
+    # 일단 사용하지 않겠다.
+    def get_labels_deprecated(self):
+        return [self.maps[id].name for id in self.map_graph.nodes if id in self.maps]
+    
+    def get_labels(self):
+        return {map_id: map.name for map_id, map in self.maps.items()}
+    
+    def get_label(self, map_id):
+        return self.maps[map_id].name
 
 # np.random.choice를 사용하여 표본 n개 뽑기
 def sample_places(place_data, n):

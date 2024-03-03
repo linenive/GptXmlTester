@@ -17,7 +17,7 @@ class Explore:
         self.maps[self.current_place.id] = self.current_place
         self.map_graph = nx.Graph()
         
-        self.reveal_neighbor()
+        self.reveal()
 
     def reveal(self):
         # 주변 지역 밝히기
@@ -46,6 +46,10 @@ class Explore:
             self.map_graph.add_edge(
                 self.current_place.id,
                 new_place.id)  
+            
+    def move_to(self, neighbor_id):
+        self.current_place = self.maps[neighbor_id]
+        self.reveal()
     
     def get_neighbor_places(self):
         return self.map_graph.neighbors(self.current_place.id)

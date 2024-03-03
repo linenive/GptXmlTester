@@ -4,28 +4,6 @@ import networkx as nx
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 
-def draw_graph_on_canvas(graph, labels, root):
-    # 노드 위치 결정
-    pos = nx.spring_layout(graph)
-    print(pos)
-
-    # 새로운 matplotlib 그림(Figure) 객체 생성
-    fig, ax = plt.subplots(figsize=(5, 4))
-    
-    # NetworkX 그래프를 그림에 그리기
-    nx.draw(graph, pos, ax=ax, with_labels=True, node_color='skyblue', edge_color='gray')
-    nx.draw_networkx_labels(graph, pos, labels, font_size=12)
-    
-    # FigureCanvasTkAgg 객체 생성
-    canvas = FigureCanvasTkAgg(fig, master=root)  # root는 Tkinter의 메인 윈도우
-    
-    # Tkinter 캔버스 위젯으로 변환 및 패킹
-    canvas_widget = canvas.get_tk_widget()
-    canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-
-    # 캔버스에 그래프 그리기
-    canvas.draw()
-
 class ExploreWindow():
     def create_new_window(self, current_explore):
         self.new_window = tk.Toplevel()
@@ -53,8 +31,41 @@ class ExploreWindow():
         local_map_header = tk.Label(self.new_window, text='지역 지도')
         local_map_header.pack()
         
-        draw_graph_on_canvas(
+        self.draw_graph_on_canvas(
             current_explore.map_graph, current_explore.get_labels(), self.new_window)
+
+    def draw_graph_on_canvas(self, graph, labels, root):
+        # 새로운 matplotlib 그림(Figure) 객체 생성
+        fig, self.ax = plt.subplots(figsize=(5, 4))
+
+        # 노드 위치 결정
+        pos = nx.spring_layout(graph)
+        
+        # NetworkX 그래프를 그림에 그리기
+        nx.draw(graph, pos, ax=self.ax, with_labels=True, node_color='skyblue', edge_color='gray')
+        nx.draw_networkx_labels(graph, pos, labels, font_size=12)
+        
+        # FigureCanvasTkAgg 객체 생성
+        self.canvas = FigureCanvasTkAgg(fig, master=root)  # root는 Tkinter의 메인 윈도우
+        
+        # Tkinter 캔버스 위젯으로 변환 및 패킹
+        canvas_widget = self.canvas.get_tk_widget()
+        canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+        # 캔버스에 그래프 그리기
+        self.canvas.draw()
+
+    def redraw_graph(self, graph, labels):
+        self.ax.clear()
+
+        # 노드 위치 결정
+        pos = nx.spring_layout(graph)
+
+        # NetworkX 그래프를 그림에 그리기
+        nx.draw(graph, pos, ax=self.ax, with_labels=True, node_color='skyblue', edge_color='gray')
+        nx.draw_networkx_labels(graph, pos, labels, font_size=12)
+
+        self.canvas.draw()
 
     def prepare_move_buttons(self):
         self.move_buttons = []
@@ -77,8 +88,16 @@ class ExploreWindow():
         for i in range(len(neighbors)):
             self.move_buttons[i].configure(
                 text=current_explore.get_label(neighbors[i]), 
-                command=lambda neighbor=neighbors[i]: self.move(neighbor))
+                command=lambda neighbor_id=neighbors[i]: self.on_click_move_button(
+                    current_explore, neighbor_id))
             self.move_buttons[i].place(x=10 + i * 140, y=200)
 
-    def move(self, neighbor):
-        print("구현 전")
+    def on_click_move_button(self, current_explore, neighbor_id):
+        current_explore.move_to(neighbor_id)
+
+        for button in self.move_buttons:
+            button.place_forget()
+        
+        self.redraw_graph(current_explore.map_graph, current_explore.get_labels())
+
+        print(current_explore.maps)

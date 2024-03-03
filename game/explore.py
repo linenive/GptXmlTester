@@ -9,7 +9,7 @@ np.random.seed(seed_value)
 class Explore:
     def __init__(self):
         self.current_place = place.Place(
-            "내 자리",
+            "My Desk",
             place.PlaceType.WORKSPACE,
             floor=2,
             is_my_desk=True)
@@ -36,6 +36,9 @@ class Explore:
             self.map_graph.add_edge(
                 self.current_place.name,
                 neighbor_place.name)
+    
+    def get_neighbor_places(self):
+        return self.map_graph.neighbors(self.current_place.name)
 
 # np.random.choice를 사용하여 표본 n개 뽑기
 def sample_places(place_data, n):

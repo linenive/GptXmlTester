@@ -32,38 +32,36 @@ class ExploreWindow():
         local_map_header.pack()
         
         self.draw_graph_on_canvas(
-            current_explore.map_graph, current_explore.get_labels(), self.new_window)
+            current_explore, self.new_window)
 
-    def draw_graph_on_canvas(self, graph, labels, root):
+    def draw_graph_on_canvas(self, current_explore, root):
         # 새로운 matplotlib 그림(Figure) 객체 생성
         fig, self.ax = plt.subplots(figsize=(5, 4))
 
-        # 노드 위치 결정
-        pos = nx.spring_layout(graph)
-        
-        # NetworkX 그래프를 그림에 그리기
-        nx.draw(graph, pos, ax=self.ax, with_labels=True, node_color='skyblue', edge_color='gray')
-        nx.draw_networkx_labels(graph, pos, labels, font_size=12)
-        
         # FigureCanvasTkAgg 객체 생성
         self.canvas = FigureCanvasTkAgg(fig, master=root)  # root는 Tkinter의 메인 윈도우
-        
+
         # Tkinter 캔버스 위젯으로 변환 및 패킹
         canvas_widget = self.canvas.get_tk_widget()
         canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-        # 캔버스에 그래프 그리기
-        self.canvas.draw()
+        self.draw_graph(current_explore)
 
-    def redraw_graph(self, graph, labels):
+    def draw_graph(self, current_explore):
         self.ax.clear()
 
         # 노드 위치 결정
-        pos = nx.spring_layout(graph)
+        pos = nx.spring_layout(current_explore.map_graph)
+
+        node_colors = ['red' if node == current_explore.current_place.id else 'skyblue' 
+                       for node in current_explore.map_graph.nodes()]
 
         # NetworkX 그래프를 그림에 그리기
-        nx.draw(graph, pos, ax=self.ax, with_labels=True, node_color='skyblue', edge_color='gray')
-        nx.draw_networkx_labels(graph, pos, labels, font_size=12)
+        nx.draw(
+            current_explore.map_graph, 
+            pos, ax=self.ax, with_labels=True, node_color=node_colors, edge_color='gray')
+        nx.draw_networkx_labels(
+            current_explore.map_graph, pos, current_explore.get_labels(), font_size=12)
 
         self.canvas.draw()
 
@@ -98,6 +96,4 @@ class ExploreWindow():
         for button in self.move_buttons:
             button.place_forget()
         
-        self.redraw_graph(current_explore.map_graph, current_explore.get_labels())
-
-        print(current_explore.maps)
+        self.draw_graph(current_explore)

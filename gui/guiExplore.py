@@ -24,7 +24,8 @@ class ExploreWindow():
             self.new_window, width=160, height=10, state='disabled')
         self.log_area.pack(padx=10, pady=10)
 
-        self.add_log('당신은 의자를 박차고 일어났다... 주위를 둘러보았다.')
+        if current_explore.current_place.is_my_desk:
+            self.add_log('당신은 의자를 박차고 일어났다... 주위를 둘러보았다.')
         self.add_log(current_explore.current_place.get_place_data().description)
         self.add_log('이제 무엇을 할까?')
 
@@ -107,3 +108,6 @@ class ExploreWindow():
             button.place_forget()
         
         self.draw_graph(current_explore)
+
+        self.add_log(f'{current_explore.current_place.name}(으)로 이동했다...')
+        self.add_log(f'{current_explore.current_place.get_place_data().description}')

@@ -1,3 +1,4 @@
+from game.data.dataType import StatusType
 
 class Employee:
     def __init__(self, name, salary):
@@ -20,3 +21,20 @@ class Employee:
             self.state = "사망"
             print(f"{self.name}이(가) 일을 하다 사망했습니다.")
     
+    def change_by_event(self, status_type, amount):
+        if status_type == StatusType.HP:
+            self.hp += amount
+            if self.hp > self.max_hp:
+                self.hp = self.max_hp
+            elif self.hp <= 0:
+                self.hp = 0
+                self.state = "사망"
+                print(f"{self.name}이(가) 사망했습니다.")
+        elif status_type == StatusType.SAN:
+            self.san += amount
+            if self.san > self.max_san:
+                self.san = self.max_san
+            elif self.san <= 0:
+                self.san = 0
+                self.state = "사망"
+                print(f"{self.name}이(가) 사망했습니다.")

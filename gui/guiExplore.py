@@ -5,16 +5,18 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import os
+import game.event as event
 
 font_path = os.path.join('fonts', 'MALGUN.TTF') 
 font_prop = fm.FontProperties(fname=font_path)
 
 class ExploreWindow():
-    def create_new_window(self, current_explore):
+    def create_new_window(self, current_explore, current_status):
         self.new_window = tk.Toplevel()
         self.new_window.title("탐험")
-        self.new_window.geometry("600x300")
+        self.new_window.geometry("600x600")
         self.new_window.geometry("+500+0")
+        self.current_status = current_status
 
         place_name = tk.Label(
             self.new_window, text=f'{current_explore.current_place.floor}층, {current_explore.current_place.name}')
@@ -111,3 +113,40 @@ class ExploreWindow():
 
         self.add_log(f'{current_explore.current_place.name}(으)로 이동했다...')
         self.add_log(f'{current_explore.current_place.get_place_data().description}')
+
+        if current_explore.event_manager.has_event(current_explore.current_place.id):
+            event = current_explore.event_manager.get_event(current_explore.current_place.id)
+            self.show_sub_event(event, event.root_sub_event_id)    
+            current_explore.event_manager.remove_event(current_explore.current_place.id)
+
+    def show_sub_event(self, current_event, subevent_id):
+        print(f'현재 이벤트: {current_event.event_name}, 현재 서브 이벤트: {subevent_id}')
+        subevent = current_event.get_sub_event(subevent_id)
+
+        if isinstance(subevent, event.Dialogue):
+            self.add_log(subevent.dialogue)
+            self.show_sub_event(current_event, subevent.next_sub_event_id)
+        elif isinstance(subevent, event.Choice):
+            self.show_choice_window(
+                subevent.choicesMap, lambda next_sub_id: self.show_sub_event(
+                    current_event, next_sub_id))
+        elif isinstance(subevent, event.ChangeStatus):
+            self.add_log('무언가 당신의 상태가 변했다...')
+            self.current_status.change_status_event_to_me(subevent.status_type, subevent.amount)
+            self.show_sub_event(current_event, subevent.next_sub_event_id)
+        elif isinstance(subevent, event.EndEvent):
+            return
+        
+    def show_choice_window(self, choicesMap, next_sub_event_callback):
+        choice_window = tk.Toplevel(self.new_window)
+        choice_window.title("선택지")
+        choice_window.geometry("+500+300")
+
+        def on_click_choice_button(next_sub_id):
+            print(f'선택지 선택: {next_sub_id}')
+            next_sub_event_callback(next_sub_id)
+            choice_window.destroy()
+
+        for dialogue, next_sub_id in choicesMap.items():
+            button = tk.Button(choice_window, text=dialogue, command=lambda next_sub_id=next_sub_id: on_click_choice_button(next_sub_id))
+            button.pack()

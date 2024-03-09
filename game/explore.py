@@ -2,6 +2,7 @@ import networkx as nx
 import game.place as place
 import numpy as np
 import time
+import game.event
 
 seed_value = int(time.time())
 np.random.seed(seed_value)
@@ -16,6 +17,7 @@ class Explore:
         self.maps = {}
         self.maps[self.current_place.id] = self.current_place
         self.map_graph = nx.Graph()
+        self.event_manager = game.event.EventManager()
         
         self.reveal()
 
@@ -44,7 +46,8 @@ class Explore:
                         self.current_place.id,
                         existing_place_id)
                     continue
-
+            
+            # 새로운 장소 생성
             new_place_data = place.place_data_table[neighbor_place_type]
             new_place = place.Place(
                 new_place_data.name,
@@ -56,6 +59,11 @@ class Explore:
             self.map_graph.add_edge(
                 self.current_place.id,
                 new_place.id)  
+            
+            # 확률적으로 이벤트 생성
+            if np.random.rand() < 1.0:
+                if new_place.place_type == place.PlaceType.CANTEEN:
+                    self.event_manager.add_event(new_place.id, game.event.preset_event_table[game.event.PresetEventType.CHEESE_GATEAU])
             
     def move_to(self, neighbor_id):
         self.current_place = self.maps[neighbor_id]

@@ -23,7 +23,7 @@ def on_work_button_click():
     statusWindow.update_var(gameMain.current_status)
 
 def open_explore_window():
-    exploreWindow.create_new_window(gameMain.current_explore)
+    exploreWindow.create_new_window(gameMain.current_explore, gameMain.current_status)
 
 def open_status_window():
     statusWindow.create_new_window(gameMain.current_status)

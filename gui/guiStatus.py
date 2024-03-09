@@ -8,7 +8,7 @@ class StatusWindow():
     def create_new_window(self, status):
         new_window = tk.Toplevel()
         new_window.title("스테이터스")
-        new_window.geometry("300x200")  # 창 크기 설정
+        new_window.geometry("300x500")  # 창 크기 설정
         new_window.geometry("+200+0")
         me_header = tk.Label(new_window, text="< 내 상태 >", font=("Arial", 16))
         me_header.pack()

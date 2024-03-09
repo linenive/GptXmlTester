@@ -17,6 +17,9 @@ class Status:
         print(f'일했습니다.')
         self.me.reduce_san_by_work()
 
+    def change_status_event_to_me(self, status_type, amount):
+        self.me.change_by_event(status_type, amount)
+
     def __str__(self):
         return f'Status\n{self.my_team.__str__()}'
 

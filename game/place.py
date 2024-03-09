@@ -1,14 +1,7 @@
 from enum import Enum
+import game.idGenerator as idGenerator
 
-class IDGenerator:
-    def __init__(self):
-        self.current_id = 0
-
-    def get_next_id(self):
-        self.current_id += 1
-        return self.current_id
-    
-idGenerator = IDGenerator()
+idGenerator = idGenerator.IDGenerator()
 
 class Place:
     def __init__(self, name, place_type, floor, is_my_desk = False):

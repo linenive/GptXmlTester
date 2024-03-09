@@ -34,7 +34,17 @@ class Explore:
         num_neighbor = int(num_neighbor)
         neighbor_places = sample_places(place_data, num_neighbor)
 
+        # 뽑은 장소 타입 목록으로 새 장소 생성 혹은 기존 장소와 연결
         for neighbor_place_type in neighbor_places:
+            # 확률적으로 기존 장소와 연결
+            if np.random.rand() < 0.5:
+                existing_place_id = self.find_place_unlinked(neighbor_place_type)
+                if existing_place_id is not None:
+                    self.map_graph.add_edge(
+                        self.current_place.id,
+                        existing_place_id)
+                    continue
+
             new_place_data = place.place_data_table[neighbor_place_type]
             new_place = place.Place(
                 new_place_data.name,
@@ -66,6 +76,14 @@ class Explore:
     
     def is_visited(self, place_id):
         return self.maps[place_id].is_revealed_neighbor_place
+    
+    def find_place_unlinked(self, place_type):
+        for place_id, place in self.maps.items():
+            if place.place_type == place_type \
+                and not self.map_graph.has_edge(self.current_place.id, place_id) \
+                and place_id != self.current_place.id:
+                return place_id
+        return None
 
 # np.random.choice를 사용하여 표본 n개 뽑기
 def sample_places(place_data, n):

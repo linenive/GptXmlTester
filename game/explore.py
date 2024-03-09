@@ -63,6 +63,9 @@ class Explore:
     
     def get_label(self, map_id):
         return self.maps[map_id].name
+    
+    def is_visited(self, place_id):
+        return self.maps[place_id].is_revealed_neighbor_place
 
 # np.random.choice를 사용하여 표본 n개 뽑기
 def sample_places(place_data, n):

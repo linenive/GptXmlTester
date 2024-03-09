@@ -58,7 +58,8 @@ class ExploreWindow():
         # 노드 위치 결정
         pos = nx.spring_layout(current_explore.map_graph)
 
-        node_colors = ['red' if node == current_explore.current_place.id else 'skyblue' 
+        node_colors = ['red' if node == current_explore.current_place.id 
+                       else 'grey' if current_explore.is_visited(node) else 'skyblue' 
                        for node in current_explore.map_graph.nodes()]
 
         # NetworkX 그래프를 그림에 그리기

@@ -46,25 +46,25 @@ class PlaceType(Enum):
 place_data_table = {
     PlaceType.WORKSPACE: PlaceData(
         PlaceType.WORKSPACE,
-        "workspace", 
+        "업무 공간", 
         "평범한 업무 공간이다. 여러 사람들이 열심히 업무를 하고 있다.",
         num_neighbor_mean=4,
         num_neighbor_std_dev=1),
     PlaceType.CANTEEN: PlaceData(
         PlaceType.CANTEEN,
-        "canteen", 
+        "탕비실", 
         "물을 마시거나 냉장고를 이용할 수 있는 공간. 가끔 맛있는 음식이 스폰되곤 한다.",
         num_neighbor_mean=3,
         num_neighbor_std_dev=1),
     PlaceType.RESTROOM: PlaceData(
         PlaceType.RESTROOM,
-        "restroom", 
+        "화장실", 
         "화장실이다. 냄새가 나는 것 같다.",
         num_neighbor_mean=2,
         num_neighbor_std_dev=1),
     PlaceType.MEETING_ROOM: PlaceData(
         PlaceType.MEETING_ROOM,
-        "meeting room", 
+        "회의실", 
         "회의를 할 수 있는 공간이다. 안이 잘 들여다보이기 때문에 몰래 무언가를 하기는 힘들 것 같다.",
         num_neighbor_mean=3,
         num_neighbor_std_dev=1),

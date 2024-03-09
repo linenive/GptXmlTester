@@ -3,6 +3,11 @@ from tkinter import scrolledtext
 import networkx as nx
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import os
+
+font_path = os.path.join('fonts', 'MALGUN.TTF') 
+font_prop = fm.FontProperties(fname=font_path)
 
 class ExploreWindow():
     def create_new_window(self, current_explore):
@@ -59,9 +64,13 @@ class ExploreWindow():
         # NetworkX 그래프를 그림에 그리기
         nx.draw(
             current_explore.map_graph, 
-            pos, ax=self.ax, with_labels=True, node_color=node_colors, edge_color='gray')
+            pos, ax=self.ax, with_labels=False, node_color=node_colors, edge_color='gray')
         nx.draw_networkx_labels(
-            current_explore.map_graph, pos, current_explore.get_labels(), font_size=12)
+            current_explore.map_graph,
+            pos,
+            current_explore.get_labels(),
+            font_size=12,
+            font_family=font_prop.get_name())
 
         self.canvas.draw()
 

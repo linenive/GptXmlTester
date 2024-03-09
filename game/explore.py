@@ -9,7 +9,7 @@ np.random.seed(seed_value)
 class Explore:
     def __init__(self):
         self.current_place = place.Place(
-            "My Desk",
+            "내 자리",
             place.PlaceType.WORKSPACE,
             floor=2,
             is_my_desk=True)

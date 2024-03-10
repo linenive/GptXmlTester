@@ -55,9 +55,9 @@ class Explore:
             
             # 업무 공간인 경우 주인 할당. 남은 사원이 없으면 빈 자리로 놔둔다.
             if new_place.place_type == place.PlaceType.WORKSPACE:
-                owner_id=self.game_main.employee_manager.try_assign_desk_someone(new_place.id)
-                if owner_id is not None:
-                    new_place.set_owner(owner_id)
+                owner=self.game_main.employee_manager.try_assign_desk_someone(new_place.id)
+                if owner is not None:
+                    new_place.set_owner(owner)
                
             self.maps[new_place.id] = new_place
             self.map_graph.add_edge(
@@ -84,10 +84,10 @@ class Explore:
         return [self.maps[id].name for id in self.map_graph.nodes if id in self.maps]
     
     def get_labels(self):
-        return {map_id: map.name for map_id, map in self.maps.items()}
+        return {map_id: map_place.get_display_name() for map_id, map_place in self.maps.items()}
     
     def get_label(self, map_id):
-        return self.maps[map_id].name
+        return self.maps[map_id].get_display_name()
     
     def is_visited(self, place_id):
         return self.maps[place_id].is_revealed_neighbor_place

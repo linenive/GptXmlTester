@@ -22,7 +22,7 @@ class EmployeeManager:
         for employee in self.employees.values():
             if not employee.has_desk():
                 employee.set_desk(place_id)
-                return employee.id
+                return employee
             
         print("회사의 모든 사람들이 이미 자리를 가지고 있습니다.")
         return None

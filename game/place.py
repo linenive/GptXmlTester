@@ -11,17 +11,22 @@ class Place:
         self.place_type = place_type
         self.floor = floor
         self.is_my_desk = is_my_desk
-        self.owner_id = -1
+        self.owner = None
         self.is_revealed_neighbor_place = False
 
     def get_place_data(self):
         return place_data_table[self.place_type]
     
-    def set_owner(self, owner_id):
-        self.owner_id = owner_id
+    def set_owner(self, owner):
+        self.owner = owner
     
     def has_owner(self):
-        return self.owner_id != -1
+        return self.owner != None
+    
+    def get_display_name(self):
+        if self.place_type == PlaceType.WORKSPACE and self.owner != None:
+            return f"{self.owner.get_name()}의 자리"
+        return self.name
 
 class PlaceData:
     def __init__(

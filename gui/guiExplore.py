@@ -134,12 +134,12 @@ class ExploreWindow():
                 self.add_log('내 책상이다...')
             elif current_explore.current_place.has_owner():
                 self.add_log(f'다른 사람의 책상이다...')
-                owner = self.game_main.employee_manager.get_employee(
-                            current_explore.current_place.owner_id)
+                owner = current_explore.current_place.owner
                 owner_window = EmployeeWindow(owner)
                 owner_window.create_new_window(self.new_window)
                 desk_action_window = DeskActionWindow(
-                    owner, owner_window, lambda log: self.add_log(log))
+                    owner, owner_window, lambda log: self.add_log(log),
+                    lambda: self.draw_graph(current_explore))
                 desk_action_window.create_new_window(self.new_window)
             else:
                 self.add_log('빈 책상이다... 주인이 없는 것 같다.')

@@ -1,10 +1,12 @@
 import tkinter as tk
 
 class DeskActionWindow():
-    def __init__(self, owner, owner_employee_window, add_log_function):
+    def __init__(self, owner, owner_employee_window, add_log_function,
+                 draw_graph_function):
         self.owner = owner
         self.owner_employee_window = owner_employee_window
         self.add_log_function = add_log_function
+        self.draw_graph_function = draw_graph_function
 
     def create_new_window(self, event_root):
         desk_action_window = tk.Toplevel(event_root)
@@ -41,6 +43,7 @@ class DeskActionWindow():
             f"이름이 {self.owner.name}(이)신듯 하다.")
         self.owner.reveal_name()
         self.owner_employee_window.update_var()
+        self.draw_graph_function()
 
     def on_press_ask_salary(self):
         self.add_log_function("연봉을 물어보았다... ")

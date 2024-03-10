@@ -1,10 +1,12 @@
 import game.team as team
 import game.employee as employee
+from game.data.employeeJob import Rank, JobGroup
 
 class Status:
     def __init__(self):
         self.my_team = team.Team('신생 팀')
-        self.me = employee.Employee('나', 1000)
+        self.me = employee.Employee(
+            '나', 1000, Rank.STAFF, JobGroup.PROGRAMMING)
         self.add_team(self.me)
 
     def add_team(self, employee):

@@ -1,7 +1,11 @@
 from game.data.dataType import StatusType
+from game.idGenerator import IDGenerator
+
+id_generator = IDGenerator()
 
 class Employee:
-    def __init__(self, name, salary):
+    def __init__(self, name, salary, rank, job_group):
+        self.id = id_generator.get_next_id()
         self.name = name
         self.salary = salary
         self.max_hp = 100
@@ -9,6 +13,8 @@ class Employee:
         self.max_san = 100
         self.san = self.max_san
         self.state = "정상"
+        self.rank = rank
+        self.job_group = job_group
 
     def __str__(self):
         return f"이름: {self.name}, 연봉: {self.salary}만, 체력: {self.hp}/{self.max_hp}, 정신력: {self.san}/{self.max_san}"

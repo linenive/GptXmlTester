@@ -11,27 +11,32 @@ font_path = os.path.join('fonts', 'MALGUN.TTF')
 font_prop = fm.FontProperties(fname=font_path)
 
 class ExploreWindow():
-    def create_new_window(self, current_explore, current_status):
+    def create_new_window(self, game_main):
         self.new_window = tk.Toplevel()
         self.new_window.title("탐험")
         self.new_window.geometry("600x600")
         self.new_window.geometry("+500+0")
-        self.current_status = current_status
+        self.game_main = game_main
 
+        current_place = game_main.current_explore.current_place
         place_name = tk.Label(
-            self.new_window, text=f'{current_explore.current_place.floor}층, {current_explore.current_place.name}')
+            self.new_window, text=f'{current_place.floor}층, ' + \
+                f'{current_place.name}')
         place_name.pack()
 
         self.log_area = scrolledtext.ScrolledText(
             self.new_window, width=160, height=10, state='disabled')
         self.log_area.pack(padx=10, pady=10)
 
-        if current_explore.current_place.is_my_desk:
+        if current_place.is_my_desk:
             self.add_log('당신은 의자를 박차고 일어났다... 주위를 둘러보았다.')
-        self.add_log(current_explore.current_place.get_place_data().description)
+        self.add_log(current_place.get_place_data().description)
         self.add_log('이제 무엇을 할까?')
 
-        move_button = tk.Button(self.new_window, text='이동하기', command=lambda: self.create_buttons(current_explore))
+        move_button = tk.Button(
+            self.new_window, 
+            text='이동하기', 
+            command=lambda: self.create_buttons(self.game_main.current_explore))
         move_button.pack()
 
         self.prepare_move_buttons()
@@ -40,7 +45,7 @@ class ExploreWindow():
         local_map_header.pack()
         
         self.draw_graph_on_canvas(
-            current_explore, self.new_window)
+            self.game_main.current_explore, self.new_window)
 
     def draw_graph_on_canvas(self, current_explore, root):
         # 새로운 matplotlib 그림(Figure) 객체 생성
@@ -114,10 +119,10 @@ class ExploreWindow():
         self.add_log(f'{current_explore.current_place.name}(으)로 이동했다...')
         self.add_log(f'{current_explore.current_place.get_place_data().description}')
 
-        if current_explore.event_manager.has_event(current_explore.current_place.id):
-            event = current_explore.event_manager.get_event(current_explore.current_place.id)
+        if self.game_main.event_manager.has_event(current_explore.current_place.id):
+            event = self.game_main.event_manager.get_event(current_explore.current_place.id)
             self.show_sub_event(event, event.root_sub_event_id)    
-            current_explore.event_manager.remove_event(current_explore.current_place.id)
+            self.game_main.event_manager.remove_event(current_explore.current_place.id)
 
     def show_sub_event(self, current_event, subevent_id):
         print(f'현재 이벤트: {current_event.event_name}, 현재 서브 이벤트: {subevent_id}')
@@ -132,7 +137,8 @@ class ExploreWindow():
                     current_event, next_sub_id))
         elif isinstance(subevent, event.ChangeStatus):
             self.add_log('무언가 당신의 상태가 변했다...')
-            self.current_status.change_status_event_to_me(subevent.status_type, subevent.amount)
+            self.game_main.current_status.change_status_event_to_me(
+                subevent.status_type, subevent.amount)
             self.show_sub_event(current_event, subevent.next_sub_event_id)
         elif isinstance(subevent, event.EndEvent):
             return

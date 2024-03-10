@@ -4,8 +4,14 @@ import gui.guiStatus as guiStatus
 import gui.guiExplore as guiExplore
 import game.gameMain as gameMain
 
+import matplotlib
+
+print(matplotlib.get_configdir())
+
+game_main = gameMain.GameMain()
+
 def press_start_game():    
-    game_thread = Thread(target=gameMain.start_game)
+    game_thread = Thread(target=game_main.start_game)
     game_thread.start()
 
     open_status_window()
@@ -19,14 +25,14 @@ def press_start_game():
     game_info_label.config(text="운명의 주사위는 던져졌다..........")
 
 def on_work_button_click():
-    gameMain.on_work()
-    statusWindow.update_var(gameMain.current_status)
+    game_main.on_work()
+    statusWindow.update_var(game_main.current_status)
 
 def open_explore_window():
-    exploreWindow.create_new_window(gameMain.current_explore, gameMain.current_status)
+    exploreWindow.create_new_window(game_main)
 
 def open_status_window():
-    statusWindow.create_new_window(gameMain.current_status)
+    statusWindow.create_new_window(game_main.current_status)
 
 # 메인 윈도우 생성
 root = tk.Tk()

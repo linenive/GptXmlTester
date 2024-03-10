@@ -39,7 +39,8 @@ class DeskActionWindow():
     def on_press_see_id_card(self):
         self.add_log_function("사원증을 슬쩍 보았다... " + \
             f"이름이 {self.owner.name}(이)신듯 하다.")
-        self.owner_employee_window.reveal_name()
+        self.owner.reveal_name()
+        self.owner_employee_window.update_var()
 
     def on_press_ask_salary(self):
         self.add_log_function("연봉을 물어보았다... ")
@@ -50,11 +51,13 @@ class DeskActionWindow():
         self.add_log_function("직군을 물어보았다... ")
         self.add_log_function(f"{self.owner_employee_window.name.get()}: " + \
             f"저는 {self.owner.get_job_group_name()}입니다.")
-        self.owner_employee_window.reveal_job_group()
+        self.owner.reveal_job_group()
+        self.owner_employee_window.update_var()
 
     def on_press_ask_rank(self):
         self.add_log_function("직급을 물어보았다... ")
         self.add_log_function(f"{self.owner_employee_window.name.get()}: " + \
             f"저는 {self.owner.get_rank_name()}입니다. 근데, 왜 물어보시죠...?")
-        self.owner_employee_window.reveal_rank()
+        self.owner.reveal_rank()
+        self.owner_employee_window.update_var()
     

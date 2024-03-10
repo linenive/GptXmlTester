@@ -16,30 +16,24 @@ class EmployeeWindow():
         me_header = tk.Label(new_window, text="< 직원 정보 >", font=("Arial", 16))
         me_header.pack()
 
-        self.name.set("이름: ???")
+        self.name.set(f"이름: {self.employee.get_name()}")
         name_label = tk.Label(new_window, textvariable=self.name)
         name_label.pack()
 
-        self.salary.set("연봉: ???만")
+        self.salary.set(f"연봉: {self.employee.get_salary()}")
         salary_label = tk.Label(new_window, textvariable=self.salary)
         salary_label.pack()
 
-        self.rank.set("직급: ???")
+        self.rank.set(f"직급: {self.employee.get_rank_name()}")
         rank_label = tk.Label(new_window, textvariable=self.rank)
         rank_label.pack()
 
-        self.job_group.set("직군: ???")
+        self.job_group.set(f"직군: {self.employee.get_job_group_name()}")
         job_group_label = tk.Label(new_window, textvariable=self.job_group)
         job_group_label.pack()
 
-    def reveal_name(self):
-        self.name.set(f"이름: {self.employee.name}")
-    
-    def reveal_salary(self):
-        self.salary.set(f"연봉: {self.employee.salary}만")
-    
-    def reveal_rank(self):
+    def update_var(self):
+        self.name.set(f"이름: {self.employee.get_name()}")
+        self.salary.set(f"연봉: {self.employee.get_salary()}")
         self.rank.set(f"직급: {self.employee.get_rank_name()}")
-    
-    def reveal_job_group(self):
         self.job_group.set(f"직군: {self.employee.get_job_group_name()}")

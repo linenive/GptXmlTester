@@ -18,21 +18,44 @@ class Employee:
         self.job_group = job_group
         self.desk_place_id = -1
 
+        self.is_name_revealed = False
+        self.is_salary_revealed = False
+        self.is_job_group_revealed = False
+        self.is_rank_revealed = False
+
     def __str__(self):
         return f"이름: {self.name}, 연봉: {self.salary}만, 체력: {self.hp}/{self.max_hp}, 정신력: {self.san}/{self.max_san}"
     
+    def get_name(self):
+        return self.name if self.is_name_revealed else "???"
+    
+    def reveal_name(self):
+        self.is_name_revealed = True
+
+    def get_salary(self):
+        return self.salary if self.is_salary_revealed else "???만"
+
+    def reveal_salary(self):
+        self.is_salary_revealed = True
+
+    def get_job_group_name(self):
+        return job_group_names[self.job_group] if self.is_job_group_revealed else "???" 
+    
+    def reveal_job_group(self):
+        self.is_job_group_revealed = True
+
+    def get_rank_name(self):
+        return rank_names[self.rank] if self.is_rank_revealed else "???"
+
+    def reveal_rank(self):
+        self.is_rank_revealed = True
+
     def has_desk(self):
         return self.desk_place_id != -1
 
     def set_desk(self, place_id):
         self.desk_place_id = place_id
-
-    def get_job_group_name(self):
-        return job_group_names[self.job_group]
     
-    def get_rank_name(self):
-        return rank_names[self.rank]
-
     def reduce_san_by_work(self):
         self.san -= 10
 

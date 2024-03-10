@@ -12,6 +12,7 @@ class GameMain:
 
     def start_game(self):
         print('게임을 시작합니다.')
+        self.current_explore.reveal()
                 
     def on_work(self):
         self.current_status.work()

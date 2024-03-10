@@ -4,22 +4,31 @@ from game.data.employeeJob import Rank, JobGroup
 class EmployeeManager:
     def __init__(self):
         # 나는 추가하지 않는다.
-        self.employees = {}
-        add_preset_employees(self.employees)
+        self.employees = make_preset_employees()
 
-    def addEmployee(self, employee):
+    def add_employee(self, employee):
         self.employees[employee.id] = employee
 
-    def removeEmployee(self, employee):
+    def remove_employee(self, employee):
         del self.employees[employee.id]
 
-    def getEmployee(self, id):
+    def get_employee(self, id):
         return self.employees[id]
     
-    def getEmployeeTable(self):
+    def get_employee_table(self):
         return self.employees
+    
+    def try_assign_desk_someone(self, place_id):
+        for employee in self.employees.values():
+            if not employee.has_desk():
+                employee.set_desk(place_id)
+                return employee.id
+            
+        print("회사의 모든 사람들이 이미 자리를 가지고 있습니다.")
+        return None
 
-def add_preset_employees(employees):
+def make_preset_employees():
+    employees = {}
     weak1 = Employee("신입개발이", 1000, Rank.INTERN, JobGroup.PROGRAMMING)
     weak2 = Employee("김종밥", 1500, Rank.STAFF, JobGroup.ART)
     weak3 = Employee("김밥진", 1500, Rank.STAFF, JobGroup.DESIGN)
@@ -36,3 +45,5 @@ def add_preset_employees(employees):
     employees[weak6.id] = weak6
     employees[weak7.id] = weak7
     employees[weak8.id] = weak8
+
+    return employees

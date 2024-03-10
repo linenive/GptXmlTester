@@ -18,8 +18,6 @@ class Explore:
         self.maps = {}
         self.maps[self.current_place.id] = self.current_place
         self.map_graph = nx.Graph()
-        
-        self.reveal()
 
     def reveal(self):
         # 주변 지역 밝히기
@@ -52,9 +50,15 @@ class Explore:
             new_place = place.Place(
                 new_place_data.name,
                 new_place_data.place_type,
-                2,
-                False
+                2
             )
+            
+            # 업무 공간인 경우 주인 할당. 남은 사원이 없으면 빈 자리로 놔둔다.
+            if new_place.place_type == place.PlaceType.WORKSPACE:
+                owner_id=self.game_main.employee_manager.try_assign_desk_someone(new_place.id)
+                if owner_id is not None:
+                    new_place.set_owner(owner_id)
+               
             self.maps[new_place.id] = new_place
             self.map_graph.add_edge(
                 self.current_place.id,

@@ -1,5 +1,6 @@
 from game.data.dataType import StatusType
 from game.idGenerator import IDGenerator
+from game.data.employeeJob import job_group_names, rank_names
 
 id_generator = IDGenerator()
 
@@ -15,9 +16,22 @@ class Employee:
         self.state = "정상"
         self.rank = rank
         self.job_group = job_group
+        self.desk_place_id = -1
 
     def __str__(self):
         return f"이름: {self.name}, 연봉: {self.salary}만, 체력: {self.hp}/{self.max_hp}, 정신력: {self.san}/{self.max_san}"
+    
+    def has_desk(self):
+        return self.desk_place_id != -1
+
+    def set_desk(self, place_id):
+        self.desk_place_id = place_id
+
+    def get_job_group_name(self):
+        return job_group_names[self.job_group]
+    
+    def get_rank_name(self):
+        return rank_names[self.rank]
 
     def reduce_san_by_work(self):
         self.san -= 10

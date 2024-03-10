@@ -4,16 +4,24 @@ import game.idGenerator as idGenerator
 idGenerator = idGenerator.IDGenerator()
 
 class Place:
-    def __init__(self, name, place_type, floor, is_my_desk = False):
+    def __init__(
+            self, name, place_type, floor, is_my_desk = False):
         self.id = idGenerator.get_next_id()
         self.name = name
         self.place_type = place_type
         self.floor = floor
         self.is_my_desk = is_my_desk
+        self.owner_id = -1
         self.is_revealed_neighbor_place = False
 
     def get_place_data(self):
         return place_data_table[self.place_type]
+    
+    def set_owner(self, owner_id):
+        self.owner_id = owner_id
+    
+    def has_owner(self):
+        return self.owner_id != -1
 
 class PlaceData:
     def __init__(

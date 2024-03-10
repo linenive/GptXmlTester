@@ -47,7 +47,8 @@ class StatusWindow():
         team_size.pack()
 
         tk.Label(new_window, text="팀원 목록").pack()
-        employee_list = tk.Label(new_window, text=status.my_team.str_all_members_name()).pack()
+        employee_list = tk.Label(new_window, text=status.my_team.str_all_members_name())
+        employee_list.pack()
 
     def update_var(self, status):
         self.my_san.set(f'정신력: {status.me.san}/{status.me.max_san}')

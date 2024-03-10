@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import os
 import game.event as event
+from gui.guiEmployee import EmployeeWindow
+from gui.guiDeskAction import DeskActionWindow
+from game.place import PlaceType
 
 font_path = os.path.join('fonts', 'MALGUN.TTF') 
 font_prop = fm.FontProperties(fname=font_path)
@@ -119,10 +122,27 @@ class ExploreWindow():
         self.add_log(f'{current_explore.current_place.name}(으)로 이동했다...')
         self.add_log(f'{current_explore.current_place.get_place_data().description}')
 
+        # 이벤트가 있는 경우 처리
         if self.game_main.event_manager.has_event(current_explore.current_place.id):
-            event = self.game_main.event_manager.get_event(current_explore.current_place.id)
-            self.show_sub_event(event, event.root_sub_event_id)    
+            current_event = self.game_main.event_manager.get_event(current_explore.current_place.id)
+            self.show_sub_event(current_event, current_event.root_sub_event_id)    
             self.game_main.event_manager.remove_event(current_explore.current_place.id)
+
+        # 업무 공간인 경우
+        if current_explore.current_place.place_type == PlaceType.WORKSPACE:
+            if current_explore.current_place.is_my_desk:
+                self.add_log('내 책상이다...')
+            elif current_explore.current_place.has_owner():
+                self.add_log(f'다른 사람의 책상이다...')
+                owner = self.game_main.employee_manager.get_employee(
+                            current_explore.current_place.owner_id)
+                owner_window = EmployeeWindow(owner)
+                owner_window.create_new_window(self.new_window)
+                desk_action_window = DeskActionWindow(
+                    owner, owner_window, lambda log: self.add_log(log))
+                desk_action_window.create_new_window(self.new_window)
+            else:
+                self.add_log('빈 책상이다... 주인이 없는 것 같다.')
 
     def show_sub_event(self, current_event, subevent_id):
         print(f'현재 이벤트: {current_event.event_name}, 현재 서브 이벤트: {subevent_id}')

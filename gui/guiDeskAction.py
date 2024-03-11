@@ -55,7 +55,7 @@ class DeskActionWindow():
         self.owner.reveal_job_group()
         self.owner_employee_window.update_var()
         self.add_log_function(f"{self.owner_employee_window.name.get()}: " + \
-            f"저는 {self.owner.get_job_group_name()}입니다.")
+            f"저는 {self.owner.get_job_group_name()} 직군입니다.")
         
 
     def on_press_ask_rank(self):
